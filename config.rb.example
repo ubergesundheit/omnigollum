@@ -43,19 +43,17 @@ Precious::App.set(:environment, :production)
 
 # Setup Omniauth via Omnigollum.
 require 'omnigollum'
-require 'omniauth-ldap'
+require 'omniauth-openid'
+require 'openid'
+require 'openid/store/filesystem'
 
 options = {
   # OmniAuth::Builder block is passed as a proc
   :providers => Proc.new do
-    provider :ldap,
-      :host => '127.0.0.1',
-      :port => 389,
-      :method => :plain,
-      :base => 'dc=example,dc=com',
-      :uid => 'uid',
-      :bind_dn: 'cn=`manager,dc=example,dc=com',
-      :password: 'password',
+    provider :open_id, 
+      # :name => 'admin',
+      :identifier => 'https://www.google.com/accounts/o8/id',
+      :store => OpenID::Store::Filesystem.new('/tmp')
   end,
   :dummy_auth => false,
   # Make the entire wiki private
